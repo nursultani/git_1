@@ -1,0 +1,50 @@
+using System;
+using Core.Config;
+using Core.Core.Browser;
+using Core.Log;
+using Core.Login;
+using Core.TestExecution;
+ 
+namespace TestAcumatica
+{
+    //Use the Check class as a parent for every test.
+    public class F100_Part1_Lesson1 : Check
+    {
+        //Lesson 1: Introduction to General Ledger.
+        //Add test-specific logic in this method.
+        public override void Execute()
+        {
+            //Sign in
+            Browser.StartingUrl = Config.SITE_DST_URL;
+            PxLogin LoginPage = new PxLogin();
+            LoginPage.Username.Type(Config.SITE_DST_LOGIN);
+            LoginPage.Password.Type(Config.SITE_DST_PASSWORD);
+            LoginPage.CompanyId.SelectValue("MyCompany");
+            LoginPage.SignIn.Click();
+             
+            #region Step 1.1: Configuring the Company
+             
+            using (TestExecution.CreateTestCaseGroup("Step 1.1: Configuring the Company"))
+            {
+                using (TestExecution.CreateTestStepGroup("1. Activate Features"))
+                {      
+                    Features Features = new Features();
+Features Features = new Features();
+                    Features.OpenScreen();
+                    Features.Insert();
+                    Features.Summary.Status.GetValue().VerifyEquals("Pending Activation");
+                    Features.RequestValidation();
+                    Features.Summary.FinancialModule.GetValue().VerifyEquals(true);
+                    Features.Summary.FinancialStandard.GetValue().VerifyEquals(true);
+                    Features.Summary.MiscModule.GetValue().VerifyEquals(true);
+                    Features.Summary.ScheduleModule.GetValue().VerifyEquals(true);
+                    Features.Summary.AutomationModule.GetValue().VerifyEquals(true);
+                    Features.Summary.IntegrationModule.GetValue().VerifyEquals(true);
+                    Features.Summary.Status.GetValue().VerifyEquals("Validated");
+                }
+            }
+             
+            #endregion
+        }
+    }
+}
