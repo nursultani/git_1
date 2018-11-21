@@ -16,6 +16,7 @@ namespace TestAcumatica
         {
             //Sign in
             Browser.StartingUrl = Config.SITE_DST_URL;
+PxLogin LoginPage = new PxLogin();
             PxLogin LoginPage = new PxLogin();
             LoginPage.Username.Type(Config.SITE_DST_LOGIN);
             LoginPage.Password.Type(Config.SITE_DST_PASSWORD);
